@@ -6,6 +6,10 @@ from typing import Dict
 
 
 class Email:
+    """Email class object to hold import email message information
+    We can parse the message payloade and decode the data
+    """
+
     def __init__(self, email_id: str, message: Dict):
         self.__email_id = email_id
         self.__message = message
@@ -23,6 +27,11 @@ class Email:
 
 
 class BankExpense:
+    """BankExpense class object to hold the bank expenses
+    Three important details for this class is the amount, location where it was charged, and date
+    There is no other important data in the push email sent from Chase, it can change if adding
+    other bank's alrts
+    """
     def __init__(self, data: str):
         self.__data = data
         self.__parsed_data = None

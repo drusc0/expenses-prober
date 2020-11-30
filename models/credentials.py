@@ -4,13 +4,16 @@ import os.path
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+from typing import List
 
 
 class Credentials:
-    def __init__(self, token_fn: str, credentials_fn: str):
+    """Credentials class to create a local token based on the credentials for the project
+    The credentials.json file can be obtained after enabling the API use
+    The token is created after verification and shouldn't be committed
+    """
+
+    def __init__(self, token_fn: str, credentials_fn: str, scopes: List[str]):
         self.__credential = None
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -23,7 +26,7 @@ class Credentials:
             if self.__credential and self.__credential.expired and self.__credential.refresh_token:
                 self.__credential.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file(credentials_fn, SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file(credentials_fn, scopes)
                 self.__credential = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open(token_fn, 'wb') as token:

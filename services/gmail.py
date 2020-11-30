@@ -1,22 +1,13 @@
+from .client import Client
 from typing import List
 
-from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 
 
-class Client:
-    def __init__(self, creds: 'Credentials', service_name: str, version: str):
-        self.__creds = creds
-        self.__service_name = service_name
-        self.__version = version
-        self.service = build(service_name, version, credentials = creds)
-
-    def __str__(self):
-        """Returns more information about the client"""
-        return f'{self.__service_name.title()}Client ver: {self.__version}'
-
-
 class GmailClient(Client):
+    """Gmail client
+    Only useful to read data from INBOX, also, it is hardcoded with the query for chase alerts
+    """
     def __init__(self, creds: 'Credentials', service_name: str = 'gmail', version: str = 'v1'):
         super().__init__(creds, service_name, version)
 
