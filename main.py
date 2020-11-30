@@ -1,4 +1,4 @@
-from models.common_budget_model import Email
+from models.common_budget_model import Email, BankExpense
 from models.credentials import Credentials
 from services.services import GmailClient
 
@@ -15,6 +15,7 @@ def main():
 
     res = gmail.get_messages()
     messages = res.get('messages', [])
+    emails = []
 
     print(f'Emails: {len(messages)}')
     for msg in messages:
@@ -22,10 +23,16 @@ def main():
         if email_id is None: continue
 
         email = gmail.get_message(email_id)
-        print(f'Email message: {email_id}')
+        # print(f'Email message: {email_id}')
         email_msg = Email(email_id, email)
-        print(f'Message: {email_msg.email_data()}')
-        print("\n---------------------------------------------\n")
+        emails.append(email_msg)
+        # print(f'Message: {email_msg.email_data()}')
+        # print("\n---------------------------------------------\n")
+
+    for e in emails:
+        data = e.email_data()
+        expense = BankExpense(data)
+        print(f'{expense.name()} - {expense.amount()} @ {expense.date()}')
 
 
 if __name__ == '__main__':
