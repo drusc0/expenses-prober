@@ -1,7 +1,9 @@
 import base64
 import re
+import pytz
 
 from datetime import datetime
+from pytz import timezone
 from typing import Dict
 
 
@@ -59,4 +61,12 @@ class BankExpense:
         _res = self._get_parsed_message()
         _date_str = _res.group(3)
         _date = datetime.strptime(_date_str, '%b %d, %Y')
+        _date = _date.astimezone(timezone('US/Pacific'))
         return _date
+
+    def get_properties(self):
+        return {
+            'expense_location': self.name(),
+            'amount': float(self.amount()),
+            'expense_date': self.date()
+        }
