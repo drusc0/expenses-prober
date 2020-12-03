@@ -23,9 +23,12 @@ class Email:
         _payload = self.__message.get('payload', {})
         _body = _payload.get('body', {})
         _data = _body.get('data', None)
-        data = base64.b64decode(_data) if _data else ""
-
-        return data.decode('utf-8')
+        try:
+            data = base64.b64decode(_data)
+            return data.decode('utf-8')
+        except Exception as err:
+            print(f"Error: {err}. Email data - {_data}")
+            return ""
 
 
 class BankExpense:

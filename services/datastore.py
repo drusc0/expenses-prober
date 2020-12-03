@@ -6,7 +6,7 @@ from google.cloud import datastore
 
 
 DS_CREDENTIAL_KEY = "GOOGLE_APPLICATION_CREDENTIALS"
-DS_CREDENTIAL_FN = "bank-common-budget-633f71a50a38.json"
+DS_CREDENTIAL_FN = "chase-expenses-6c9036e3b68b.json"
 
 # Datastore client
 # instantiates a client to push informantion extracted from gmail

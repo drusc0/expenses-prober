@@ -28,11 +28,11 @@ def gmail_main():
         if email_id is None: continue
 
         email = gmail.get_message(email_id)
-        # print(f'Email message: {email_id}')
+        print(f'Email message: {email_id}')
         email_msg = Email(email_id, email)
         emails.append(email_msg)
-        # print(f'Message: {email_msg.email_data()}')
-        # print("\n---------------------------------------------\n")
+        print(f'Message: {email_msg.email_data()}')
+        print("\n---------------------------------------------\n")
 
     expenses = []
     for e in emails:
