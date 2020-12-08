@@ -1,6 +1,5 @@
 import base64
 import re
-import pytz
 
 from datetime import datetime
 from pytz import timezone
@@ -71,5 +70,8 @@ class BankExpense:
         return {
             'expense_location': self.name(),
             'amount': float(self.amount()),
-            'expense_date': self.date()
+            'expense_date': self.date(),
+            # setting some default properties
+            'hide': 'false',
+            'category': 'unknown'
         }

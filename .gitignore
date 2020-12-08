@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__
+env
+
+
+# credentials for datastore
+chase-expense*.json
+credentials*.json
+
+token.*
