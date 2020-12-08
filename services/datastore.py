@@ -21,8 +21,9 @@ class DatastoreClient:
         # Set the environmental variable to be able to authenticate using default
         # service account, and avoiding to pass the credentials
         if not os.environ.get(DS_CREDENTIAL_KEY):
-            dir_name = os.path.dirname(os.path.abspath(__file__))
+            dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             credential_path = os.path.join(dir_name, DS_CREDENTIAL_FN)
+            print(f"Credential path: {credential_path}")
             os.environ[DS_CREDENTIAL_KEY] = credential_path
 
         self.service = datastore.Client()
