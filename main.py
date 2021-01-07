@@ -36,10 +36,13 @@ def gmail_main():
 
     expenses = []
     for e in emails:
-        data = e.email_data()
-        expense = BankExpense(data)
-        expenses.append(expense)
-        print(f'{expense.name()} - {expense.amount()} @ {expense.date()}')
+        try:
+            data = e.email_data()
+            expense = BankExpense(data)
+            print(f'{expense.name()} - {expense.amount()} @ {expense.date()}')
+            expenses.append(expense)
+        except Exception as e:
+            print("Email does not seem to be formatted correctly (email is not text?)")
 
     print(f'Main: Saving to datastore...')
     ds.put_many(list(map(lambda x: x.get_properties(), expenses)))
