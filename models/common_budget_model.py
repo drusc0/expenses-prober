@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 from pytz import timezone
 from typing import Dict
+from bs4 import BeautifulSoup
 
 
 class Email:
@@ -23,11 +24,32 @@ class Email:
         _body = _payload.get('body', {})
         _data = _body.get('data', None)
         try:
-            data = base64.b64decode(_data)
-            return data.decode('utf-8')
+            data = base64.b64decode(_data + "===")
+            data_utf_8 = data.decode('utf-8')
+            return data_utf_8
         except Exception as err:
-            print(f"Error: {err}. Email data - {_data}")
-            return ""
+            print(f"Error: {err}. Trying HTML email...")
+            data = base64.urlsafe_b64decode(_data + "===")
+            return self._get_expense_amount_and_location( data )
+
+    def _get_expense_amount_and_location(self, data):
+        soup = BeautifulSoup(data, 'html.parser')
+        template = "A charge of ($USD) {Amount} at {Merchant} has been authorized on {Date}"
+        _d = { "Amount": None, "Merchant": None, "Date": None}
+        for tr in soup.find_all('tr'):
+            found = False
+            for td in tr.find_all('td'):
+                if found:
+                    _d[key] = td.get_text()
+
+                if td.get_text() in ("Date", "Merchant", "Amount"):
+                    found = True
+                    key = td.get_text()
+                else:
+                    found = False
+
+        to_ret = template.format_map(_d)
+        return to_ret
 
 
 class BankExpense:
@@ -39,7 +61,7 @@ class BankExpense:
     def __init__(self, data: str):
         self.__data = data
         self.__parsed_data = None
-        self.__pattern = re.compile(r'A charge of \(\$USD\) ([\d+\.]+) at '
+        self.__pattern = re.compile(r'A charge of \(\$USD\) \$([\d+\.]+) at '
                                     r'([\s\S]+) has been authorized on ([\S, ]+) at', re.IGNORECASE)
 
     def __str__(self):
